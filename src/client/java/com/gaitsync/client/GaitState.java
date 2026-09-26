@@ -21,10 +21,14 @@ public final class GaitState {
     /**
      * Ile fazy przypada na tick swiata.
      *
-     * 0.4 odpowiada mniej wiecej tempu zwyklego marszu. Wartosc nie musi byc
-     * dokladna -- wazne, zeby byla TA SAMA w obu nagraniach.
+     * 0.7 odpowiada tempu zwyklego marszu. Pierwsza wersja miala 0.4
+     * i chod wygladal na spowolniony -- vanilla przesuwa faze mniej wiecej
+     * o tyle, ile wynosi predkosc konczyn, a ta przy marszu to okolo 0.7.
+     *
+     * Wartosc nie musi byc co do joty dokladna -- wazne, zeby byla TA SAMA
+     * w obu nagraniach.
      */
-    public static float rate = 0.4F;
+    public static float rate = 0.7F;
 
     /** Przesuniecie fazy w tickach, gdy nagrania trzeba recznie zgrac. */
     public static float offset = 0.0F;
@@ -32,11 +36,10 @@ public final class GaitState {
     /**
      * Stala amplituda wymachu, 0 = zostaw oryginalna.
      *
-     * Przy domyslnym 1.0 konczyny wymachuja jednakowo niezaleznie od tego,
-     * jak szybko gracz faktycznie szedl -- bez tego jedno nagranie moze miec
-     * szerszy krok od drugiego mimo zgodnej fazy.
+     * 0.7 to szerokosc kroku przy zwyklym marszu. Przy 1.0 konczyny
+     * wymachiwaly przesadnie szeroko, bo to juz poziom biegu.
      */
-    public static float amplitude = 1.0F;
+    public static float amplitude = 0.7F;
 
     /** Zamrozenie: faza stoi w miejscu na wartosci offsetu. */
     public static boolean frozen = false;
