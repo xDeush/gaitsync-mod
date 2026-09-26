@@ -28,6 +28,12 @@ public class GaitSyncClient implements ClientModInitializer {
                 dispatcher.register(ClientCommands.literal("gaitsync")
                         .executes(ctx -> report(ctx.getSource()))
 
+                        .then(ClientCommands.literal("reset").executes(ctx -> {
+                            ctx.getSource().sendFeedback(
+                                    Component.literal(GaitReset.reset()));
+                            return 1;
+                        }))
+
                         .then(ClientCommands.literal("on").executes(ctx -> {
                             GaitState.enabled = true;
                             return report(ctx.getSource());

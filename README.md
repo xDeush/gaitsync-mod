@@ -12,21 +12,41 @@ gracz porusza sie identycznie. Przy crossfade w montazu widac to od razu.
 
 ## Co robi
 
-Faza chodu przestaje zalezec od dystansu i staje sie funkcja czasu swiata.
-Ten sam moment swiata daje ten sam uklad konczyn -- w kazdej instancji gry,
-przy kazdym nagraniu, bez recznej synchronizacji.
+Zeruje faze chodu na zadanie. Robisz to w obu instancjach tuz przed
+nagraniem, stajesz w miejscu, i ruszacie w tym samym momencie -- oba
+przebiegi startuja z tego samego punktu cyklu, a dalej animacja leci
+normalnie, z prawdziwego ruchu gracza.
 
-Dodatkowo amplituda wymachu jest stala, wiec jedno nagranie nie ma szerszego
-kroku od drugiego.
+Mod NIE zmienia animacji w zaden inny sposob. Nie nadpisuje jej ciagle,
+nie zamraza, nie podmienia tempa -- po prostu ustawia licznik na zero.
 
 ## Uzycie
 
-Wrzuc jar do `mods` razem z Fabric API. Dziala od razu, domyslne ustawienia
-sa gotowe do renderowania.
+Wrzuc jar do `mods` razem z Fabric API. Potem, przed kazdym nagraniem,
+w obu instancjach:
+
+```
+/gaitsync reset
+```
+
+Tyle. Reszta komendy to tryb awaryjny, opisany nizej.
+
+## Bez moda
+
+To samo daje przelogowanie: faza liczy sie od powstania encji gracza, wiec
+wyjscie do menu i powrot zeruje ja tak samo. Mod jest po to, zeby nie
+trzeba bylo przerywac nagrania.
+
+## Tryb ciagly (domyslnie wylaczony)
+
+`/gaitsync on` wlacza nadpisywanie fazy z czasu swiata. Animacja przestaje
+wtedy wynikac z ruchu gracza i wyglada sztucznie -- ten tryb ma sens tylko,
+gdy zerowanie nie wystarcza, bo nagrania rozjezdzaja sie w trakcie.
 
 Komenda do poprawek bez restartu gry:
 
 ```
+/gaitsync reset            wyzeruj faze chodu (to jest to, czego zwykle chcesz)
 /gaitsync                  pokaz obecne ustawienia
 /gaitsync on | off         wlacz / wylacz synchronizacje
 /gaitsync freeze           zamroz faze (konczyny stoja)

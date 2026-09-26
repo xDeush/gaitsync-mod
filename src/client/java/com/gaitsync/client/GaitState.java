@@ -15,8 +15,15 @@ package com.gaitsync.client;
 public final class GaitState {
     private GaitState() {}
 
-    /** Czy nadpisujemy faze chodu. Domyslnie tak -- mod ma dzialac od razu. */
-    public static boolean enabled = true;
+    /**
+     * Ciagle nadpisywanie fazy. Domyslnie WYLACZONE.
+     *
+     * W tym trybie animacja przestaje wynikac z ruchu gracza i staje sie
+     * funkcja czasu -- chod wyglada wtedy sztucznie, bo nie reaguje na to,
+     * jak gracz naprawde sie porusza. Do zgrania dwoch nagran wystarczy
+     * jednorazowe /gaitsync reset przed nagraniem.
+     */
+    public static boolean enabled = false;
 
     /**
      * Ile fazy przypada na tick swiata.
