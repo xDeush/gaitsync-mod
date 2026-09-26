@@ -6,6 +6,7 @@ import com.gaitsync.GaitSync;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Zeruje faze chodu gracza.
@@ -31,24 +32,34 @@ public final class GaitReset {
      */
     public static String reset() {
         Minecraft client = Minecraft.getInstance();
-        LivingEntity player = client.player;
-        if (player == null) {
-            return "Brak gracza -- wejdz najpierw do swiata.";
+        if (client.level == null) {
+            return "Brak swiata -- wejdz najpierw do gry albo odtworz nagranie.";
         }
 
-        if (!resolve(player)) {
-            return "Nie znalazlem pola fazy chodu. Szczegoly w logu gry.";
+        // Zerujemy WSZYSTKICH graczy w swiecie, nie tylko siebie.
+        // W replayu Flashbacka postac, ktora widzisz, jest osobna encja
+        // odtwarzana z nagrania -- nie jest to client.player.
+        int done = 0;
+        for (Player player : client.level.players()) {
+            if (!resolve(player)) {
+                return "Nie znalazlem pola fazy chodu. Szczegoly w logu gry.";
+            }
+            try {
+                Object walkAnimation = walkAnimationField.get(player);
+                positionField.setFloat(walkAnimation, 0.0F);
+                done++;
+            } catch (IllegalAccessException | RuntimeException e) {
+                GaitSync.LOGGER.warn("Nie udalo sie wyzerowac fazy chodu", e);
+                return "Nie udalo sie wyzerowac fazy. Szczegoly w logu gry.";
+            }
         }
 
-        try {
-            Object walkAnimation = walkAnimationField.get(player);
-            positionField.setFloat(walkAnimation, 0.0F);
-            return "Faza chodu wyzerowana. Zrob to samo w drugiej instancji "
-                    + "i ruszcie w tym samym momencie.";
-        } catch (IllegalAccessException | RuntimeException e) {
-            GaitSync.LOGGER.warn("Nie udalo sie wyzerowac fazy chodu", e);
-            return "Nie udalo sie wyzerowac fazy. Szczegoly w logu gry.";
+        if (done == 0) {
+            return "Nie znalazlem zadnego gracza w swiecie.";
         }
+        return "Wyzerowano faze chodu: " + done + " "
+                + (done == 1 ? "gracz" : "graczy")
+                + ". Zrob to samo w drugiej instancji w tym samym miejscu nagrania.";
     }
 
     private static boolean resolve(LivingEntity player) {
