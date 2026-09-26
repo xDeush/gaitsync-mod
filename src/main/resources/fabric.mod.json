@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "gaitsync",
+	"version": "${version}",
+	"name": "GaitSync",
+	"description": "Synchronizuje faze animacji chodu miedzy nagraniami, zeby przenikanie w montazu nie pokazywalo dwoch par nog pod innym katem.",
+	"authors": ["xDeush"],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"main": ["com.gaitsync.GaitSync"],
+		"client": ["com.gaitsync.client.GaitSyncClient"]
+	},
+	"mixins": [
+		{
+			"config": "gaitsync.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": ">=${minecraft_version}",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
