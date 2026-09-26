@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.gaitsync.client.GaitClock;
 import com.gaitsync.client.GaitState;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 
 /**
@@ -29,7 +29,8 @@ public class HumanoidModelMixin {
             return;
         }
 
-        if (GaitState.playersOnly && !isLocalPlayerLike(state)) {
+        // Gracze maja wlasny typ stanu, wiec nie trzeba porownywac id.
+        if (GaitState.playersOnly && !(state instanceof AvatarRenderState)) {
             return;
         }
 
@@ -44,10 +45,5 @@ public class HumanoidModelMixin {
         if (GaitState.amplitude > 0.0F) {
             state.walkAnimationSpeed = GaitState.amplitude;
         }
-    }
-
-    private static boolean isLocalPlayerLike(HumanoidRenderState state) {
-        Minecraft client = Minecraft.getInstance();
-        return client.player != null && state.id == client.player.getId();
     }
 }
